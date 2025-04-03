@@ -3,13 +3,16 @@ html, body {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    background: #f5f5f5;
+    background: #c36f6f;
   }
   
   canvas {
     display: block;
-    background-color: #ffffff;
+    border: 2px solid #333;
     touch-action: none;
+    width: 90vw;
+    height: 80vh;
+    margin: auto;
   }
   
   #clearButton {
