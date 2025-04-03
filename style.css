@@ -3,19 +3,28 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  background: #c36f6f;
+  background: #343434;
 }
 
-canvas {
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100vh;
+}
+
+#drawCanvas {
   display: block;
-  border: 2px solid #333;
-  background-color: #e0f7fa;
+  border: 12px solid #244cfc;
+  background-color: #d7f7fb;
   touch-action: none;
   width: 90vw;
   height: 80vh;
   margin: auto;
+  padding-top:1rem;
+  border-radius: 1rem;
 }
-
+/* 
 #clearButton {
   position: absolute;
   top: 1rem;
@@ -33,4 +42,4 @@ canvas {
 
 #clearButton:active {
   transform: scale(0.98);
-}
+} */

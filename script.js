@@ -31,8 +31,8 @@ canvas.addEventListener('pointerdown', (e) => {
 canvas.addEventListener('pointermove', (e) => {
   if (!drawing) return;
   ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.strokeStyle = '#000';
-  ctx.lineWidth = 4;
+  ctx.strokeStyle = '#2387c6';
+  ctx.lineWidth = 12;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   ctx.stroke();
@@ -47,10 +47,10 @@ canvas.addEventListener('pointerleave', () => {
   drawing = false;
 });
 
-const clearButton = document.getElementById('clearButton');
-clearButton.addEventListener('click', () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-});
+// const clearButton = document.getElementById('clearButton');
+// clearButton.addEventListener('click', () => {
+//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+// });
 
 // Prevent touch scrolling
 canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
