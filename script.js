@@ -53,6 +53,6 @@ clearButton.addEventListener('click', () => {
 });
 
 // Prevent touch scrolling
-document.body.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-document.body.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
+canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+canvas.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
