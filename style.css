@@ -3,6 +3,7 @@ html, body {
     padding: 0;
     height: 100%;
     overflow: hidden;
+    scroll-behavior: none;
     background: #c36f6f;
   }
   
