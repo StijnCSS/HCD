@@ -53,3 +53,7 @@ const clearButton = document.getElementById('clearButton');
 clearButton.addEventListener('click', () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
+
+document.body.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+document.body.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+document.body.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
