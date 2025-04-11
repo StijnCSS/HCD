@@ -1,58 +1,59 @@
-const canvas = document.getElementById('drawCanvas');
-const ctx = canvas.getContext('2d');
+window.addEventListener('load', () => {
+  const canvas = document.querySelector("canvas");
+  const ctx = canvas.getContext("2d");
+  
 
-function resizeCanvas() {
-  const canvasContainerWidth = window.innerWidth * 0.9;
-  const canvasContainerHeight = window.innerHeight * 0.8;
-  canvas.width = canvasContainerWidth;
-  canvas.height = canvasContainerHeight;
-}
+  // resizing
+  function resizeCanvas() {
+    const container = document.querySelector(".sketchpad");
+    if (!container) return;
+    const bounds = container.getBoundingClientRect();
+    canvas.width = bounds.width - 32;
+    canvas.height = bounds.height;
+  }
+  
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+  // variables
+  let painting = false;
 
-let drawing = false;
-let resetTimeout;
+  function startPosition(e) {
+    painting = true;
+    draw(e); // draw the first point
+  }
 
-function scheduleCanvasReset() {
-  clearTimeout(resetTimeout);
-  resetTimeout = setTimeout(() => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, 1000); // 1 second of inactivity
-}
+  function finishedPosition() {
+    painting = false;
+    ctx.beginPath(); // reset the path so lines don’t connect
+  }
 
-canvas.addEventListener('pointerdown', (e) => {
-  drawing = true;
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX, e.offsetY);
-  scheduleCanvasReset();
+  function draw(e) {
+    if (!painting) return;
+
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = "#000";
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  }
+  
+  // event listeners (use pointer events for stylus/touch support)
+  canvas.addEventListener('pointerdown', startPosition);
+  canvas.addEventListener('pointerup', finishedPosition);
+  canvas.addEventListener('pointermove', draw);
+
+  const resetButton = document.getElementById('resetButton');
+  if (resetButton) {
+    resetButton.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  }
+
 });
-
-canvas.addEventListener('pointermove', (e) => {
-  if (!drawing) return;
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.strokeStyle = '#2387c6';
-  ctx.lineWidth = 12;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.stroke();
-  scheduleCanvasReset();
-});
-
-canvas.addEventListener('pointerup', () => {
-  drawing = false;
-});
-
-canvas.addEventListener('pointerleave', () => {
-  drawing = false;
-});
-
-// const clearButton = document.getElementById('clearButton');
-// clearButton.addEventListener('click', () => {
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
-// });
-
-// Prevent touch scrolling
-canvas.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-canvas.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
