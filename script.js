@@ -1,59 +1,71 @@
 window.addEventListener('load', () => {
-  const canvas = document.querySelector("canvas");
-  const ctx = canvas.getContext("2d");
-  
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
 
-  // resizing
-  function resizeCanvas() {
-    const container = document.querySelector(".sketchpad");
-    if (!container) return;
-    const bounds = container.getBoundingClientRect();
-    canvas.width = bounds.width - 32;
-    canvas.height = bounds.height;
+  const clearBtn = document.getElementById('clear');
+  const predictBtn = document.getElementById('predict');
+  const output = document.getElementById('output');
+  const URL = "https://teachablemachine.withgoogle.com/models/5Pgnhz02_/";
+  let model;
+
+  let drawing = false;
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('mousemove', draw);
+
+  canvas.addEventListener('touchstart', startDraw, { passive: false });
+  canvas.addEventListener('touchend', endDraw, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+
+  function getPos(e) {
+    if (e.touches) {
+      return [e.touches[0].clientX - canvas.offsetLeft, e.touches[0].clientY - canvas.offsetTop];
+    }
+    return [e.offsetX, e.offsetY];
   }
-  
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
 
-  // variables
-  let painting = false;
-
-  function startPosition(e) {
-    painting = true;
-    draw(e); // draw the first point
-  }
-
-  function finishedPosition() {
-    painting = false;
-    ctx.beginPath(); // reset the path so lines don’t connect
-  }
-
-  function draw(e) {
-    if (!painting) return;
-
-    ctx.lineWidth = 4;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = "#000";
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    ctx.lineTo(x, y);
-    ctx.stroke();
+  function startDraw(e) {
+    drawing = true;
+    const [x, y] = getPos(e);
     ctx.beginPath();
     ctx.moveTo(x, y);
   }
-  
-  // event listeners (use pointer events for stylus/touch support)
-  canvas.addEventListener('pointerdown', startPosition);
-  canvas.addEventListener('pointerup', finishedPosition);
-  canvas.addEventListener('pointermove', draw);
 
-  const resetButton = document.getElementById('resetButton');
-  if (resetButton) {
-    resetButton.addEventListener('click', () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
+  function draw(e) {
+    if (!drawing) return;
+    const [x, y] = getPos(e);
+    ctx.lineTo(x, y);
+    ctx.stroke();
   }
 
+  function endDraw() {
+    drawing = false;
+    ctx.closePath();
+  }
+
+  clearBtn.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    output.textContent = 'Canvas cleared!';
+  });
+
+  async function loadModel() {
+    model = await tmImage.load(URL + "model.json", URL + "metadata.json");
+    console.log("Model loaded");
+  }
+
+  loadModel();
+
+  predictBtn.addEventListener('click', async () => {
+    const image = new Image();
+    image.src = canvas.toDataURL();
+    image.onload = async () => {
+      const prediction = await model.predict(image);
+      prediction.sort((a, b) => b.probability - a.probability);
+      output.textContent = `You drew: ${prediction[0].className} (${(prediction[0].probability * 100).toFixed(1)}%)`;
+    };
+  });
 });
