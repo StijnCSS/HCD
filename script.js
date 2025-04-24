@@ -1,17 +1,44 @@
 window.addEventListener('load', () => {
+  let lastInputTime = Date.now();
+  let isCheckingIdle = false;
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.strokeStyle = "#000";
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 6;
   ctx.lineCap = "round";
 
   const clearBtn = document.getElementById('clear');
-  const predictBtn = document.getElementById('predict');
-  const output = document.getElementById('output');
-  const URL = "https://teachablemachine.withgoogle.com/models/5Pgnhz02_/";
-  let model;
+  const typedText = document.getElementById('typedText');
+  const copyBtn = document.getElementById('copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(typedText.value)
+        .then(() => console.log('Text copied to clipboard'))
+        .catch(err => console.error('Error copying text: ', err));
+    });
+  }
+
+  // Add functionality for "Spatie" and "Wis" buttons
+  const spaceBtn = document.getElementById('space');
+  if (spaceBtn) {
+    spaceBtn.addEventListener('click', () => {
+      typedText.value += ' ';
+    });
+  }
+
+  const clearTextBtn = document.getElementById('clearText');
+  if (clearTextBtn) {
+    clearTextBtn.addEventListener('click', () => {
+      typedText.value = '';
+    });
+  }
 
   let drawing = false;
+  let modelReady = false;
+  let predictionTimeout;
+
 
   canvas.addEventListener('mousedown', startDraw);
   canvas.addEventListener('mouseup', endDraw);
@@ -36,36 +63,74 @@ window.addEventListener('load', () => {
   }
 
   function draw(e) {
-    if (!drawing) return;
+  if (!drawing) return;
+  lastInputTime = Date.now();
     const [x, y] = getPos(e);
     ctx.lineTo(x, y);
     ctx.stroke();
   }
+  
+  async function predictFromCanvas() {
+    if (!modelReady || !model) return;
 
-  function endDraw() {
-    drawing = false;
-    ctx.closePath();
-  }
-
-  clearBtn.addEventListener('click', () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    output.textContent = 'Canvas cleared!';
-  });
-
-  async function loadModel() {
-    model = await tmImage.load(URL + "model.json", URL + "metadata.json");
-    console.log("Model loaded");
-  }
-
-  loadModel();
-
-  predictBtn.addEventListener('click', async () => {
     const image = new Image();
     image.src = canvas.toDataURL();
     image.onload = async () => {
       const prediction = await model.predict(image);
+      console.log("FULL prediction array:", prediction);
       prediction.sort((a, b) => b.probability - a.probability);
-      output.textContent = `You drew: ${prediction[0].className} (${(prediction[0].probability * 100).toFixed(1)}%)`;
+      typedText.value += prediction[0].className;
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
+  }
+
+
+  function endDraw() {
+    drawing = false;
+    ctx.closePath();
+    if (predictionTimeout) clearTimeout(predictionTimeout);
+    if (!isCheckingIdle) {
+      isCheckingIdle = true;
+      checkIdle();
+    }
+  }
+
+  clearBtn.addEventListener('click', () => {
+    typedText.value = typedText.value.slice(0, -1);
   });
+
+  // Load Teachable Machine model
+  const URL = "https://teachablemachine.withgoogle.com/models/-uYpKMTS7/";
+  let model;
+
+  async function loadModel() {
+    if (typeof tmImage === 'undefined') {
+      console.error("Teachable Machine library not loaded yet.");
+      return;
+    }
+  
+    model = await tmImage.load(URL + "model.json", URL + "metadata.json");
+    modelReady = true;
+    
+    console.log("Model loaded");
+  }
+
+  // Wait for tmImage to be defined before calling loadModel
+const waitForTM = setInterval(() => {
+    if (typeof tmImage !== 'undefined') {
+      clearInterval(waitForTM);
+      loadModel();
+    }
+  }, 100); // check every 100ms
+
+  function checkIdle() {
+    const now = Date.now();
+    if (now - lastInputTime >= 500) {
+      isCheckingIdle = false;
+      predictFromCanvas();
+    } else {
+      requestAnimationFrame(checkIdle);
+    }
+  }
 });

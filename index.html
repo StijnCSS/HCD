@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Draw Letters</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <section id="sketchpad">
-    <canvas id="canvas"></canvas>
-    <div class="buttons">
-    <button id="resetButton">Reset</button></div>
-  </section>
-  <script src="script.js"></script>
 
+
+<p id="output">Waiting for input...</p>
+<textarea id="typedText" rows="4" cols="40" placeholder="Your letter will appear here..." style="margin-top: 1rem;"></textarea>
+
+<div class="wrapper">
+    <h1>Scribly</h1>
+    
+
+    
+    <canvas id="canvas" width="280" height="280"></canvas>
+    
+    <div class="buttons">
+      <button id="clear">Terug</button>
+      <button id="space">Spatie</button>
+      <button id="copy">Kopieer</button>
+      <button id="clearText">Wis</button>
+    </div>
+</div>
+
+
+
+<!-- TensorFlow + Teachable Machine -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"></script>
+
+<script src="script.js"></script>
 </body>
 </html>
