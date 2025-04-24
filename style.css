@@ -24,6 +24,7 @@
       background: #d80000; /* More vivid Etch A Sketch red */
       border: 12px solid #b22222;
       border-radius: 1rem 1rem 0 0;
+      padding-bottom:4rem ;
       /* box-shadow: 0 0 1.5rem rgba(178,34,34,0.7); */
     }
   canvas {
@@ -56,7 +57,13 @@
   
   .buttons {
   display: flex;
+  flex-direction: column;
   width: 100%;
+  }
+  
+  .buttons div {
+  width: 100%;
+  display: flex;
   }
   #output {
     font-size: 1.5rem;
