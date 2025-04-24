@@ -1,6 +1,7 @@
 window.addEventListener('load', () => {
   let lastInputTime = Date.now();
   let isCheckingIdle = false;
+  let shiftMode = false;
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = "#fff";
@@ -32,6 +33,14 @@ window.addEventListener('load', () => {
   if (clearTextBtn) {
     clearTextBtn.addEventListener('click', () => {
       typedText.value = '';
+    });
+  }
+  
+  const shiftBtn = document.getElementById('shift');
+  if (shiftBtn) {
+    shiftBtn.addEventListener('click', () => {
+      shiftMode = !shiftMode;
+      shiftBtn.classList.toggle('active', shiftMode);
     });
   }
 
@@ -79,7 +88,8 @@ window.addEventListener('load', () => {
       const prediction = await model.predict(image);
       console.log("FULL prediction array:", prediction);
       prediction.sort((a, b) => b.probability - a.probability);
-      typedText.value += prediction[0].className;
+      const char = prediction[0].className;
+      typedText.value += shiftMode ? char.toUpperCase() : char.toLowerCase();
       ctx.fillStyle = "#fff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
