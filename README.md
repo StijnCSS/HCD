@@ -73,9 +73,75 @@ async function predictFromCanvas() {
 ````
 
 ![MLomgeving](/images/ml.png)
-#### obstakels
+
  
  
  ## Test 02 zonder Erik maar wel in de trein
  ![Week02test](/images/Week%202.png)
- Ik heb mijn 2e versie getest. In deze versie heb ik veel meer feedback toegevoegd.
+ Ik heb mijn 2e versie getest. In deze versie heb ik veel meer feedback toegevoegd. Je ziet onder de het canvas een tekst dat laat zien wat de machine learning denkt. en ik heb in de heading toegeovegd wat de bedoel is. 'draw a letter with your finger'. De feedback die ik kreeg was dat de canvas erg hoog op de pagina staat en dat de buttons klein zijn en moeilijk om te lezen. Een probleem dat ik had was dat alle inputs die ik deed allemaal dezelfde response gaven. er stond steeds `you drew: C(90,0%)`. Na een heleboel testen en te checken wat het canvas precies naar de back-end stuurde kwam ik erachter dat alleen de zwarte lijnen gestuurd werden zonder de witte achtergrond. Mijn machine learning is getrained op een zwarte lijn met een witte achtergrond.
+ ````ctx.fillStyle = "#fff";````
+ Door 1 regel JS toe te dat het canvas een witte background gaf kreeg ik opeens wel de juiste resultaten.
+ 
+ ## week 3 BUTTONS BUTTONS
+ ![my styling](/images/styling.png)
+ In deze week heb de laatste core functionaliteiten toegevoegd om de app compleet te maken. In week 2 was het typen allemaal goed geintegreerd en was er al wat feedback. Er miste nog wat core functionaliteit zoals. 
+ - Caps
+ - lock
+ - Wissen
+ - Kopiëren 
+ - spatie
+ - backspace
+ - Duidelijke output  
+ 
+ ```` js
+   // Spatie button
+  const spaceBtn = document.getElementById('space');
+  if (spaceBtn) {
+    spaceBtn.addEventListener('click', () => {
+      typedText.value += ' ';
+    });
+  }
+  // Backspace button
+  const clearTextBtn = document.getElementById('clearText');
+  if (clearTextBtn) {
+    clearTextBtn.addEventListener('click', () => {
+      typedText.value = '';
+    });
+  }
+  // shift button
+  const shiftBtn = document.getElementById('shift');
+  if (shiftBtn) {
+    shiftBtn.addEventListener('click', () => {
+      shiftMode = !shiftMode;
+      shiftBtn.classList.toggle('active', shiftMode);
+    });
+  }
+  
+    const copyBtn = document.getElementById('copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(typedText.value)
+        .then(() => console.log('Text copied to clipboard')) //debugin
+        .catch(err => console.error('Error copying text: ', err)); //debugin
+    });
+  }
+````  
+
+ ## Feedback week 3 en de toekomst
+ ![changes Week 03](/images/aanpassingenW3.png)
+ Ik had getest met Erik in het lokaal. Hij vond het nice geworden. De buttons waren duidelijk voor hem en de active state was goed. De flow was leuk en het ging voor nu allemaal snel genoeg. De output was alleen erg klein nog daar had hij moeite mee om te lezen dus die heb ik aangepast. `groter en meer contrast`
+ 
+ #### De dingen die hij graag in de toekomst zou willen zien zijn 
+ - Meerdere letters in 1 canvas.
+ - Aan kunnen passen heoalng het duurt 
+ voordat de input verzonden wordt met een 
+ slider.
+ - woorden herkennen
+ 
+ Wat ik zelf nog toe zou willen voegen als ik nog door zou gaan met dit project is een echte goeie database die letters en leestekens consistent kan herkennen.  
+ Ik zou de ervaring nog leuker willen maken door gimmick dingen toe te voegen zoals een regenboog pen of emojis etc
+ 
+ # Conclusie
+ Ik heb bij dit project de nadruk op een LEUKE manier van typen. Ik heb me echt gefocussed op één concept omdat ik dit helemaal goed werkend wilde maken. Ik vond het jammer dat we eigenlijk niet echt goed hebben kunnen testen met Erik maar  
+
+ik ben wel blij dat Erik enthousiast was over mijn idee en dat het idee ook goed is gelukt.

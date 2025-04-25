@@ -16,26 +16,26 @@ window.addEventListener('load', () => {
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(typedText.value)
-        .then(() => console.log('Text copied to clipboard'))
-        .catch(err => console.error('Error copying text: ', err));
+        .then(() => console.log('Text copied to clipboard')) //debugin
+        .catch(err => console.error('Error copying text: ', err)); //debugin
     });
   }
 
-  // Add functionality for "Spatie" and "Wis" buttons
+  // Spatie button
   const spaceBtn = document.getElementById('space');
   if (spaceBtn) {
     spaceBtn.addEventListener('click', () => {
       typedText.value += ' ';
     });
   }
-
+  // Backspace button
   const clearTextBtn = document.getElementById('clearText');
   if (clearTextBtn) {
     clearTextBtn.addEventListener('click', () => {
       typedText.value = '';
     });
   }
-  
+  // shift button
   const shiftBtn = document.getElementById('shift');
   if (shiftBtn) {
     shiftBtn.addEventListener('click', () => {
