@@ -106,6 +106,7 @@ window.addEventListener('load', () => {
     }
   }
 
+// Clear button haalt 1 teken weg 
   clearBtn.addEventListener('click', () => {
     typedText.value = typedText.value.slice(0, -1);
   });

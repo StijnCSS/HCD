@@ -74,4 +74,8 @@ async function predictFromCanvas() {
 
 ![MLomgeving](/images/ml.png)
 #### obstakels
-Tijdens het testen was 
+ 
+ 
+ ## Test 02 zonder Erik maar wel in de trein
+ ![Week02test](/images/Week%202.png)
+ Ik heb mijn 2e versie getest. In deze versie heb ik veel meer feedback toegevoegd.
