@@ -2,6 +2,7 @@
 ### Erik heeft een fysieke beperking waardoor hij moeite heeft om op plekken waar veel beweging is van externe bronnen zijn toetsenbord te gebruiken. Erik wilt een oplossing waardoor hij een toetsenbord heeft waardoor hij zo min mogelijk hoeft te tikken en fouten te corrigeren. Ik ga daarom voor Erik een toetsenbord ontwikkelen waar hij letter kan tekenen. Het grote oppervlak helpt met fouten minimaliseren.
 
 ## Week 1 Proof of concept
+![proof of concept](/images/v1.png)
 In week 1 heb ik een simpele HTML canvas opgezet met JavaScript waarin je met je vinger of stylus kunt tekenen. Hiermee wilde ik testen of deze manier van invoer bruikbaar is voor Erik, die moeite heeft met kleine toetsenborden door zijn fysieke beperking.
 
 De opzet was bewust eenvoudig: een wit canvas waar Erik op kon tekenen. Er was nog geen herkenning van letters, enkel de mogelijkheid om te tekenen.
